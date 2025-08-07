@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { Server } from 'socket.io'; // Add Socket.IO
 import http from 'http'; // Required for Socket.IO
-import { checkBlacklist } from './controllers/authController.js';
+
 import authRoutes from './Routes/authRoutes.js';
 import postRoutes from './Routes/postRoutes.js';
 
