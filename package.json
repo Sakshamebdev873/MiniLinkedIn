@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-   "setup-production": "npm i && cd client && npm i",
+   
+    "setup-production" : "npm run install-client && npm run build-client && npm install",
     "server": "nodemon server",
     "client": "cd client && npm run dev",
-    "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\""
-
+    "start": "concurrently --kill-others-on-fail \" npm run server\" \" npm run client\"",
+    "install-client": "cd client && npm install",
+    "build-client" : "cd client && npm run build"
+   
   },
   "keywords": [],
   "author": "",
