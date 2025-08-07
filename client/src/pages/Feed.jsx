@@ -92,17 +92,20 @@ export default function Feed() {
   const [loading, setLoading] = useState(false);
 
   const handleUserClick = async (userId) => {
-    try {
-      setLoading(true);
-      const userData = await getUserDetails(userId);
-      setSelectedUser(userData);
-      setIsModalOpen(true);
-    } catch (err) {
-      console.error("Failed to fetch user details", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setIsModalOpen(true);       // 🔥 Open modal immediately
+  setLoading(true);           // 🔄 Show spinner
+  setSelectedUser(null);      // (optional) Clear old data
+
+  try {
+    const userData = await getUserDetails(userId);
+    setSelectedUser(userData); // ✅ Set data once fetched
+  } catch (err) {
+    console.error("Failed to fetch user details", err);
+  } finally {
+    setLoading(false);         // ✅ Hide spinner
+  }
+};
+
   // ✅ WebSocket connection for real-time updates
   useEffect(() => {
     const socket = io("http://localhost:5100", {
@@ -183,7 +186,15 @@ export default function Feed() {
       console.error("Logout failed", error.response?.data || error.message);
     }
   };
+ const [content, setContent] = useState("");
+ 
 
+  // Reset content after successful post
+  useEffect(() => {
+    if (navigation.state === "idle") {
+      setContent(""); // Clear textarea when post is done
+    }
+  }, [navigation.state]);
   return (
     <div className="p-6 max-w-xl mx-auto">
       {/* 🔐 Auth Buttons */}
@@ -225,6 +236,8 @@ export default function Feed() {
     name="content"
     placeholder="What's on your mind?"
     rows={4}
+    onChange={(e) => setContent(e.target.value)}
+    value={content}
     className="border border-gray-300 p-4 w-full rounded-xl resize-none text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200"
   />
 
@@ -257,12 +270,15 @@ export default function Feed() {
                 {post?.author?.name?.charAt(0)?.toUpperCase() || "A"}
               </div>
               <div className="flex flex-col">
-                <button
-                  onClick={() => handleUserClick(post?.author?._id)}
-                  className="font-semibold text-left text-gray-900 group-hover:text-blue-600 transition-colors hover:underline focus:outline-none"
-                >
-                  {post?.author?.name || "Anonymous"}
-                </button>
+               <button
+  onClick={() => handleUserClick(post?.author?._id)}
+  title="View profile"
+  className="flex items-center gap-2 text-blue-600 font-semibold hover:underline hover:text-blue-700 cursor-pointer"
+>
+  <span>👤</span>
+  <span>View {post?.author?.name || "User"}'s Profile</span>
+</button>
+
                 {isModalOpen && (
   <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
     {loading ? (
