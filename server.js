@@ -32,8 +32,8 @@ app.use(express.json());
 app.set('io', io);
 
 // Routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', postRoutes);
 
 // Socket.IO connection
 io.on('connection', (socket) => {

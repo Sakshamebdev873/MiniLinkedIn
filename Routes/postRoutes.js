@@ -3,8 +3,8 @@ import {createPost,getAllPosts,getPostsByUser} from '../Controllers/postControll
 import authMiddleware from '../Middleware/authMiddleware.js'
 const router = express.Router();
 
-router.post('/', authMiddleware,createPost);
-router.get('/', getAllPosts);
-router.get('/user/:userId', getPostsByUser);
+router.post('/posts', authMiddleware,createPost);
+router.get('/posts', getAllPosts);
+router.get('/posts/user/:userId', getPostsByUser);
 
 export default router
